@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Api\LoginRequest;
+use App\Http\Requests\Api\RegisterRequest;
 
 /**
  * Class AuthController
@@ -21,19 +23,13 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|unique:users,email',
-            'password' => 'required|confirmed',
-        ]);
+        $validated = $request->validated();
+        $validated['password'] = bcrypt($validated['password']);
+        $validated['email'] = strtolower($validated['email']);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => strtolower($request->email),
-            'password' => bcrypt($request->password),
-        ]);
+        $user = User::create($validated);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -49,14 +45,10 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required|string',
-        ]);
 
-        $credentials = request(['email', 'password']);
+        $credentials = $request->validated();
 
         if (!Auth::attempt($credentials)) {
             return response()->json([
