@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+    php-fpm:
+        container_name: php-fpm
+        build:
+            args:
+                env: ${APP_ENV}
+            context: ../../
+            dockerfile: .infrastructure/docker/php-app/Dockerfile
+            target: local
+        volumes:
+            - ../../:/application
+        command: sh -c 'php-fpm'
+
+    nginx:
+        container_name: nginx
+        build:
+            args:
+                env: local
+            context: ../../
+            dockerfile: .infrastructure/docker/nginx/Dockerfile
+        depends_on:
+            - php-fpm
+        ports:
+            - 8001:80
