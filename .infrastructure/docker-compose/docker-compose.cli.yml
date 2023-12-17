@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  async_main_consumer:
+    build: ../docker/cli
+    # network_mode: bridge
+    working_dir: /application
+    volumes:
+      - ../../:/application
+      - ../../storage/logs:/application/storage/logs
+    # command: php -d memory_limit=2048M  artisan queue:work --verbose --tries=3 --timeout=3600 --queue=main --sleep=3
+    command: php -d memory_limit=2048M  artisan queue:work -vvv
+    restart: always

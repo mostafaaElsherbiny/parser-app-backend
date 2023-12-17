@@ -1,6 +1,6 @@
 firstTime:dev composer files alias
 
-local: dev alias
+local: dev cli alias
 
 dev:
 	docker-compose \
@@ -29,3 +29,5 @@ alias:
 
 art:
 	docker exec -t php-fpm bash -c 'php artisan $(filter-out $@,$(MAKECMDGOALS))'
+cli:
+	docker-compose -f .infrastructure/docker-compose/docker-compose.cli.yml up -d --build

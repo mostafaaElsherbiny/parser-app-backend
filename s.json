@@ -1,0 +1,15 @@
+{
+    "uuid": "3e0eae07-70fd-4f58-91fa-235296406e1a",
+    "displayName": "App\\Jobs\\SendVerificationMessage",
+    "job": "Illuminate\\Queue\\CallQueuedHandler@call",
+    "maxTries": null,
+    "maxExceptions": null,
+    "failOnTimeout": false,
+    "backoff": null,
+    "timeout": null,
+    "retryUntil": null,
+    "data": {
+        "commandName": "App\\Jobs\\SendVerificationMessage",
+        "command": "O:32:\"App\\Jobs\\SendVerificationMessage\":1:{s:4:\"user\";O:45:\"Illuminate\\Contracts\\Database\\ModelIdentifier\":5:{s:5:\"class\";s:15:\"App\\Models\\User\";s:2:\"id\";i:6;s:9:\"relations\";a:0:{}s:10:\"connection\";s:5:\"mysql\";s:15:\"collectionClass\";N;}}"
+    }
+}

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Http;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
-use App\Http\Resources\NewsApiResource;
+use App\Jobs\SendVerificationMessage;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +16,4 @@ use App\Http\Resources\NewsApiResource;
 */
 
 Route::get('/', function () {
-
-
-    //business entertainment general health science sports technology
-
-
-
-    return "test api route";
 });
