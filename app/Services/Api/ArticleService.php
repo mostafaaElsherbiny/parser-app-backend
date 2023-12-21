@@ -14,40 +14,17 @@ use Illuminate\Http\Request;
 class ArticleService
 {
 
-
     public function getArticles(Request $request)
     {
-        return  Article::when(
-            $request->has('sortBy') && $request->has('sortValue'),
-            fn ($query) => $query->orderBy(
-                $request->input('sortBy'),
-                $request->input('sortValue')
-            )
-        )
-            ->when(
-                $request->has('filter_by') && $request->has('filter_value') && $request->has('filter_condition') == '=',
-                fn ($query) => $query->where(
-                    $request->input('filter_by'),
-                    $request->input('filter_condition'),
-                    $request->input('filter_value')
-                )
-            )
-            ->when(
-                $request->has('filter_by') && $request->has('filter_value') && $request->has('filter_condition') == 'like',
-                fn ($query) => $query->where(
-                    $request->input('filter_by'),
-                    $request->input('filter_condition'),
-                    '%' . $request->input('filter_value') . '%'
-                )->orWhere(
-                    $request->input('filter_by'),
-                    $request->input('filter_condition'),
-                    $request->input('filter_value') . '%'
-                )->orWhere(
-                    $request->input('filter_by'),
-                    $request->input('filter_condition'),
-                    '%' . $request->input('filter_value')
-                )
-            )
+        $searchAble = $request->has('filter_by') && $request->has('filter_value') && $request->has('filter_condition') == 'like';
+
+        $filterAble = $request->has('filter_by') && $request->has('filter_value') && $request->has('filter_condition') == '=';
+
+        $orderAble = $request->has('sortBy') && $request->has('sortValue');
+
+        return Article::when($orderAble, fn ($query) => $query->sort($request->sortBy, $request->sortValue))
+            ->when($filterAble, fn ($query) => $query->filter($request->filter_by, $request->filter_value))
+            ->when($searchAble, fn ($q) => $q->search($request->filter_by, $request->filter_value))
             ->paginate($request->input('per_page', 10));
     }
 }
