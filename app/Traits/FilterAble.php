@@ -4,8 +4,8 @@ namespace App\Traits;
 
 trait FilterAble
 {
-    public function scopeFilter($query, $filter_by, $filter_value)
+    public function scopeFilter($query, $filterBy, $filterValue)
     {
-        return $query->where($filter_by, "=", $filter_value);
+        return $query->where($filterBy, "=", $filterValue);
     }
 }

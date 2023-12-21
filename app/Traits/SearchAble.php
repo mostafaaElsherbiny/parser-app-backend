@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Traits;
 
 trait SearchAble
 {
-    public function scopeSearch($query, $filter_by, $filter_value)
+    public function scopeSearch($query, $filterBy, $filterValue)
     {
-        return $query->where($filter_by, "like", '%' . $filter_value . '%')
-            ->orWhere($filter_by, "like", $filter_value . '%')
-            ->orWhere($filter_by, "like", '%' . $filter_value);
+        return $query->where($filterBy, "like", '%' . $filterValue . '%')
+            ->orWhere($filterBy, "like", $filterValue . '%')
+            ->orWhere($filterBy, "like", '%' . $filterValue);
     }
 }
