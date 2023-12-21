@@ -1,20 +1,15 @@
 <?php
 
-
 namespace App\Services\Integrations;
 
 use App\DTO\ArticleIntegrationDto;
 use Illuminate\Support\Facades\Http;
-use App\Http\Resources\NewsApiResource;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class NewsApiIntegration implements ArticlesIntegrationInterface
 {
+    private $baseUrl;
 
-    private   $baseUrl;
-
-
-    const LANG = 'en';
+    public const LANG = 'en';
 
     public function __construct()
     {
@@ -47,7 +42,8 @@ class NewsApiIntegration implements ArticlesIntegrationInterface
             $articles = $response->json()['articles'];
 
             foreach ($articles as $article) {
-                $data[] = new ArticleIntegrationDto(
+                $data[] =
+                new ArticleIntegrationDto(
                     title: $article['title'],
                     description: $article['description'],
                     url: $article['url'],
@@ -56,6 +52,7 @@ class NewsApiIntegration implements ArticlesIntegrationInterface
                     content: $article['content'],
                     category: $category,
                     source: 'news_api'
+
                 );
             }
         }

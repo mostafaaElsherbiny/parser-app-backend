@@ -17,4 +17,18 @@ class ArticleIntegrationDto
         public string $source
     ) {
     }
+
+    public function toArray(): array
+    {
+        return [
+            'title' => $this->title,
+            'description' => $this->description,
+            'url' => $this->url,
+            'urlToImage' => $this->urlToImage,
+            'publishedAt' => $this->publishedAt,
+            'content' => $this->content,
+            'category' => $this->category,
+            'source' => $this->source,
+        ];
+    }
 }

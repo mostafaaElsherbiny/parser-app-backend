@@ -1,18 +1,14 @@
 <?php
 
-
 namespace App\Services\Integrations;
 
 use App\DTO\ArticleIntegrationDto;
 use Illuminate\Support\Facades\Http;
-use App\Http\Resources\NewsApiResource;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class GuardianApiIntegration implements ArticlesIntegrationInterface
 {
 
     private $baseUrl;
-
 
     const LANG = 'en';
 
@@ -27,14 +23,12 @@ class GuardianApiIntegration implements ArticlesIntegrationInterface
      */
 
     public function getArticles(): array
-
     {
         $apiKey = config('integrations.guardian_api.api_key');
 
         $limit = 2;
 
         $url = $this->baseUrl . '?api-key=' . $apiKey . '&show-fields=thumbnail&page-size=' . $limit;
-
 
         $data = [];
 

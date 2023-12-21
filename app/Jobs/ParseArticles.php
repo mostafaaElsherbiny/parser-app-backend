@@ -3,18 +3,20 @@
 namespace App\Jobs;
 
 use App\Models\Article;
+use App\Services\Integrations\ArticlesIntegrationInterface;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use App\Services\Integrations\ArticlesIntegrationInterface;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ParseArticles implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -29,23 +31,18 @@ class ParseArticles implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('Start parsing articles' . $this->articlesIntegration . ' integration');
-        $data = $this->articlesIntegration->getArticles();
+        Log::info('Start parsing articles integration', [
+            'integration' => $this->articlesIntegration::class,
+        ]);
 
-        foreach ($data as $article) {
-            $resource = new Article([
-                'title' => $article->title,
-                'description' => $article->description,
-                'url' => $article->url,
-                'urlToImage' => $article->urlToImage,
-                'publishedAt' => $article->publishedAt,
-                'content' => $article->content,
-                'category' => $article->category,
-                'source' => $article->source,
-            ]);
-            $resource->save();
-        }
+        collect(
+            $this->articlesIntegration->getArticles()
+        )->each(fn($article) =>
+            Article::create($article->toArray())
+        );
 
-        Log::info('End parsing articles');
+        Log::info('End parsing articles', [
+            'integration' => $this->articlesIntegration::class,
+        ]);
     }
 }

@@ -1,20 +1,15 @@
 <?php
 
-
 namespace App\Services\Integrations;
 
 use App\DTO\ArticleIntegrationDto;
 use Illuminate\Support\Facades\Http;
-use App\Http\Resources\NewsApiResource;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class NytimesApiIntegration implements ArticlesIntegrationInterface
 {
+    private $baseUrl;
 
-    private   $baseUrl;
-
-
-    const LANG = 'en';
+    public const LANG = 'en';
 
     public function __construct()
     {
@@ -43,7 +38,8 @@ class NytimesApiIntegration implements ArticlesIntegrationInterface
         $articles = $response->json()['results'];
 
         foreach ($articles as $article) {
-            $data[] = new ArticleIntegrationDto(
+            $data[] =
+            new ArticleIntegrationDto(
                 title: $article['title'] ?? "no title",
                 description: $article['abstract'],
                 url: $article['url'],
